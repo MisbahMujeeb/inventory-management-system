@@ -23,30 +23,16 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const userSchemaLogin = new mongoose.Schema({
-email: {
-  type: String,
-  required: [true, "Email is Required"],
-  unique: true,
-},
-password: {
-  type: String,
-  required: [true, "Password is Required"],
-},
-});
-
-
-userSchemaLogin.statics.login = async function (email, password) {
+userSchema.statics.login = async function(email, password) {
   const user = await this.findOne({ email });
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
       return user;
     }
-    throw Error("incorrect password");
+    throw Error('Incorrect password');
   }
-  throw Error("incorrect email");
+  throw Error('Incorrect email');
 };
 
 module.exports = mongoose.model("Users", userSchema);
-module.exports = mongoose.model("UsersLogin", userSchemaLogin);

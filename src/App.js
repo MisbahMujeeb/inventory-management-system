@@ -6,6 +6,7 @@ import TopBar from './components/topbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Seccrets from './components/Seccrets'
 import 'react-toastify/dist/ReactToastify.css'
+import Main from './components/main';
 
 function App() {
   return (
@@ -13,18 +14,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/registerLogin" element={<LoginSignUp/>}/>
-        <Route path="/" element={<Seccrets/>}/>
+        <Route path="/" element={<Main/>}/>
       </Routes>
     </BrowserRouter>
     </>
     // <LoginSignUp />
-//  <div className='flex'>
-//   <Sidebar />
-//   <div className=" text-2xl font-semibold flex-1 h-screen">
-//   <TopBar />
-//   <Dashboard />
-//   </div>
-//  </div>
+
   );
 }
 

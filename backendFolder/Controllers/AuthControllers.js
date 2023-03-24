@@ -1,5 +1,6 @@
-const {User , UsersLogin }= require("../Models/AuthModels");
+const User = require("../Models/AuthModels");
 const jwt = require("jsonwebtoken");
+
 
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
@@ -56,14 +57,15 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.login = async (req, res) => {
   const { email, password } = req.body;
+  console.log('email',email ," " ,password )
   try {
-    const user = await UsersLogin.login(email, password);
+    const user = await User.login(email, password);
     const token = createToken(user._id);
     res.cookie("jwt", token,
      {  httpOnly: false, maxAge: maxAge * 1000 });
     res.status(200).json({ user: user._id, status: true });
   } catch (err) {
-    const errors = handleErrors(err);
+     const errors = handleErrors(err);
     res.json({ errors, status: false });
   }
 };
