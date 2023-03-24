@@ -1,19 +1,50 @@
 import React, { useState } from 'react'
 import { LoginButton } from '../common/loginButton'
+import axios from 'axios'
+import { useNavigate } from 'react-router'
+import { toast, ToastContainer } from 'react-toastify'
+import Login from './login'
 
 const LoginSignUp = () => {
   const [login, setLogin] = useState(true)
-  const [registerName , setRegisterName] = useState('')
-  const [registerEmail , setRegisterEmail] = useState('')
-  const [registerPassword , setRegisterPassword] = useState('')
+  const [values, setValues] = useState({username:'', email: "", password: "" });
 
-  const submitRegister = () => {
-    if(!registerName || !registerEmail || !registerPassword){
-      alert('Please Fill All the Fields.')
-    }else{
+  const navigate = useNavigate()
+
+  const generateError = (error) =>
+    toast.error(error, {
+      position: "bottom-right",
+    });
+
+  const handleSubmitRegister = async (event) => {
+     event.preventDefault()
+   if(!values.username || !values.email || !values.password){
+    alert ('PLease fill all fields.')
+   }else{
+    try {
+      const {data} = await axios.post("http://localhost:4000/register",
+      { ...values},
+      {withCredentials:true}
+      )
+      if (data) {
+        // console.log('good')
+        if (data.errors) {
+          const {username, email, password } = data.errors;
+          if (email) generateError(email);
+          else if (password) generateError(password);
+        } else {
+          setValues({ username: "", email: "", password: "" });
+           navigate("/");
+        }
+      }
       
+    } catch (error) {
+      console.log(error);
     }
+   }
   }
+
+
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-slate-800'>
@@ -42,52 +73,48 @@ const LoginSignUp = () => {
             {!login ?
               (
                 <div className={``}>
+                <ToastContainer />
                   <p className='mb-4'>
                     Create your account.It's free and only take a minute.
                   </p>
-                  <form action="#" className='duration-700'>
+                  <form onSubmit={(e) => handleSubmitRegister(e)} className='duration-700'>
                     <div className='mt-5'>
                       <input type="text"
                        placeholder='Enter Name' maxLength={20} 
-                       onChange={(text) => setRegisterName(text)}
+                       name='username'
+                       onChange={(e) =>
+              setValues({ ...values, [e.target.name]: e.target.value })
+            }
                        className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
                     </div>
                     <div className='mt-5'>
                       <input type="email"
                        placeholder='Enter Email'
-                        maxLength={20}
-                        onChange={(text) => setRegisterEmail(text)}
-                         className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
+                        maxLength={40}
+                        name='email'
+                        onChange={(e) =>
+              setValues({ ...values, [e.target.name]: e.target.value })
+            }                  
+                               className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
                     </div>
                     <div className='mt-5'>
                       <input type="password"
                        placeholder='Enter Password'
                         maxLength={20} 
-                        onChange={(text) => setRegisterPassword(text)}
+                        name='password'
+                        onChange={(e) =>
+              setValues({ ...values, [e.target.name]: e.target.value })
+            }
                         className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
                     </div>
-                    <div class="mt-5">
-                      <button onClick={submitRegister} class="w-full bg-[#06AFA5] py-3 text-center shadow-sm shadow-slate-500 rounded-lg text-white">Register Now</button>
+                    <div className="mt-5">
+                      <button type="submit" className="w-full bg-[#06AFA5] py-3 text-center shadow-sm shadow-slate-500 rounded-lg text-white">Register Now</button>
                     </div>
                   </form>
+                
                 </div>
               ) : (
-                <div className={``}>
-                  <p className='mb-4'>
-                    Login to your Account.
-                  </p>
-                <form action="#">
-                  <div className='mt-5'>
-                    <input type="email" placeholder='Enter Email' maxLength={20} className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
-                  </div>
-                  <div className='mt-5'>
-                    <input type="password" placeholder='Enter Password' maxLength={20} className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400' />
-                  </div>
-                  <div class="mt-5">
-                    <button class="w-full bg-[#06AFA5] py-3 shadow-sm shadow-slate-500 text-center rounded-lg text-white">Login</button>
-                  </div>
-                </form>
-                </div>
+               <Login />
               )
             }
           </div>
