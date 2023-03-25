@@ -1,27 +1,22 @@
 import React, { useState } from 'react'
 import { HiMenuAlt3 } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 
 const Sidebar = () => {
     const [open, setOpen] = useState(true)
     const Menus = [
-        { title: 'Dashboard', src: "chart_fill" },
-        { title: 'Products', src: "products", gap: true },
-        { title: 'Add Products', src: "addProducts" },
-        { title: 'Sell Item', src: "Search" },
-        { title: 'Add Suppliers', src: "products", gap: true },
-        { title: 'MyStocks', src: "Search" }
+        { title: 'Dashboard', src: "chart_fill" , ref:'/' },
+        { title: 'Products', src: "products", ref:'/'},
+        { title: 'Add Products', src: "addProducts", ref:'/AddProducts' },
+        { title: 'Sell Item', src: "Search" , ref:'/' },
+        { title: 'Add Suppliers', src: "products", ref:'/' },
+        { title: 'MyStocks', src: "Search" ,  ref:'/' }
     ]
     return (
         <div className={`${open ? "w-72" : "w-20"}
     p-5 pt-8
      h-screen duration-300 bg-slate-700 relative`}>
-            {/* <img
-            src={require("../assets/arrow.png")}
-            className={`absolute cursor-pointer -right-3 top-9 w-7 border-slate-700
-             border-2 rounded-full  ${!open && "rotate-180"}`}
-            onClick={() => setOpen(!open)}
-          /> */}
             <div className='pb-1 flex justify-end text-white' >
                 <HiMenuAlt3 size={26} className="cursor-pointer"
                     onClick={() => setOpen(!open)}
@@ -52,25 +47,26 @@ const Sidebar = () => {
                     >
                         <img className='w-8' src={require(`../assets/${Menu.src}.png`)} />
                         <span
-                        style={{
-                            transitionDelay: `${index + 3}00ms`
-                        }}
-                         className={`${!open && "opacity-0 translate-x-28 overflow-hidden"}
+                            style={{
+                                transitionDelay: `${index + 3}00ms`
+                            }}
+                            className={`${!open && "opacity-0 translate-x-28 overflow-hidden"}
                         whitespace-pre
                          origin-left duration-500 
                           `}>
                             {Menu.title}
                         </span>
                         <h2
-                className={`${
-                  open && "hidden"
-                } absolute left-48 bg-white font-semibold whitespace-pre text-gray-
+                            className={`${open && "hidden"
+                                } absolute left-48 bg-white font-semibold whitespace-pre text-gray-
                  rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 
                  m-2
                  group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-              >
-                {Menu?.title}
-              </h2>
+                        >
+                        <Link to={Menu.ref}>
+                            {Menu?.title}
+                        </Link>
+                        </h2>
                     </li>
                 ))}
             </ul>

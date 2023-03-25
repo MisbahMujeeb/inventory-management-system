@@ -4,9 +4,9 @@ import LoginSignUp from './components/loginsignUp';
 import Sidebar from './components/sidebar';
 import TopBar from './components/topbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Seccrets from './components/Seccrets'
 import 'react-toastify/dist/ReactToastify.css'
 import Main from './components/main';
+import AddProducts from './components/AddProducts'
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/registerLogin" element={<LoginSignUp/>}/>
         <Route path="/" element={<Main/>}/>
+        <Route path='/AddProducts' element={<AddProducts />} />
       </Routes>
     </BrowserRouter>
     </>
