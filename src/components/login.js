@@ -23,7 +23,8 @@ const Login = () => {
     console.log('setValuesForLogin before' ,valuesForLogin)
 
      const {data} = await axios.post("http://localhost:4000/login",
-     { ...valuesForLogin}
+     { ...valuesForLogin},
+     {withCredentials:true}
      )
      if (data) {
        // console.log('good')

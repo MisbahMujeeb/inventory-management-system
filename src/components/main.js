@@ -9,6 +9,12 @@ import TopBar from './topbar'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
+import AddItems from './AddItems'
+import PurchaseItems from './purchaseItem'
+import SellItems from './SelItems'
+import MyStock from './myStock'
+import AddSuppliers from './AddSuppliers'
+
 
 
 const Main = () => {
@@ -26,7 +32,9 @@ const Main = () => {
         if (!data.status) {
           removeCookie('jwt')
           navigate('/registerLogin')
-        } else { toast(`HI ${data.user}`, { theme: 'dark' }) }
+        } else { 
+          // toast(`HI ${data.user}`, { theme: 'dark' })
+         }
       }
     }
     varifyUser()
@@ -37,9 +45,17 @@ const Main = () => {
       <ToastContainer />
       <div className='flex'>
       <Sidebar />      
-        <div className=" text-2xl font-semibold flex-1 h-screen">
+        <div className="w-screen h-screen">
           <TopBar />
-          <Dashboard />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/PurchaseItems" element={<PurchaseItems />} />
+            <Route path="/AddItems" element={<AddItems />} />
+            <Route path="/MyStock" element={<MyStock />} />
+            <Route path="/SellItems" element={<SellItems />} />
+            <Route path='/AddSuppliers' element={<AddSuppliers />} />
+            {/* add your own routes here */}
+          </Routes>
         </div>
       </div>
     </>

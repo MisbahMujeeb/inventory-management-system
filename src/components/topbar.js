@@ -5,11 +5,14 @@ import { useCookies } from 'react-cookie'
 const TopBar = () => {
 
   const navigate = useNavigate()
-  const [removeCookie] = useCookies([])
+  // const [removeCookie] = useCookies([])
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+
 
   const logOut = () => {
     navigate('/registerLogin')
     removeCookie('jwt')
+    window.location.reload()
   }
   return (
     <div className='bg-gray-200 h-16 grid'>
