@@ -28,7 +28,7 @@ const Sidebar = () => {
     <div
       className={`${
         open ? 'w-72' : 'w-20'
-      } p-5 pt-8 h-screen duration-300 bg-slate-700 relative`}
+      } p-5 pt-8 h-[100vh] duration-300 bg-slate-700 relative`}
     >
       <div className="pb-1 flex justify-end text-white">
         <HiMenuAlt3

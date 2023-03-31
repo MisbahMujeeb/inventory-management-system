@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
 
 const Login = () => {
-    
     const [valuesForLogin, setValuesForLogin] = useState({email: "", password: "" });
     const navigate = useNavigate()
 
@@ -45,8 +44,7 @@ const Login = () => {
  }
 
   return (
-    <div className={``}>
-                <ToastContainer />
+    <div >
                   <p className='mb-4'>
                     Login to your Account.
                   </p>
@@ -75,6 +73,8 @@ const Login = () => {
                   <div className="mt-5">
                     <button type='submit' className="w-full bg-[#06AFA5] py-3 shadow-sm shadow-slate-500 text-center rounded-lg text-white">Login</button>
                   </div>
+                  <ToastContainer />
+
                 </form>
                 </div>
   )

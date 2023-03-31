@@ -13,11 +13,11 @@ const handleErrors = (err) => {
   let errors = {username:"", email: "", password: "" };
 
   console.log(err);
-  if (err.message === "incorrect email") {
+  if (err.message === "Incorrect email") {
     errors.email = "That email is not registered";
   }
 
-  if (err.message === "incorrect password") {
+  if (err.message === "Incorrect password") {
     errors.password = "That password is incorrect";
   }
 
