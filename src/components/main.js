@@ -14,6 +14,7 @@ import PurchaseItems from './purchaseItem'
 import SellItems from './SelItems'
 import MyStock from './myStock'
 import AddSuppliers from './AddSuppliers'
+import Stores from './Stores'
 
 
 
@@ -33,7 +34,7 @@ const Main = () => {
           removeCookie('jwt')
           navigate('/registerLogin')
         } else { 
-          // toast(`HI ${data.user}`, { theme: 'dark' })
+          // toast(`HI ${data.user} ${data.uId}`, { theme: 'dark' })
          }
       }
     }
@@ -54,6 +55,8 @@ const Main = () => {
             <Route path="/MyStock" element={<MyStock />} />
             <Route path="/SellItems" element={<SellItems />} />
             <Route path='/AddSuppliers' element={<AddSuppliers />} />
+            <Route path='/Stores' element={<Stores />} />
+
             {/* add your own routes here */}
           </Routes>
         </div>

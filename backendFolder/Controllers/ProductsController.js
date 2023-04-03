@@ -4,8 +4,8 @@ const Products = require('../Models/ProductsModal')
 module.exports.AddProducts = async (req, res, next) => {
   try {
     console.log('Add Products')
-    const { productName, productQuantity,productPrice, productManufacturer, productDescription } = req.body;
-    const product = await Products.create({ productName, productQuantity,productPrice, productManufacturer, productDescription });
+    const { productName, productQuantity,productPrice, productManufacturer, productDescription , userId } = req.body;
+    const product = await Products.create({ productName, productQuantity,productPrice, productManufacturer, productDescription ,userId });
     res.status(201).json({ success: true, message: 'Product added successfully' });
   } catch (err) {
     console.log(err);
@@ -14,14 +14,28 @@ module.exports.AddProducts = async (req, res, next) => {
 };
 
 // Fetch Products
+// module.exports.FetchProducts = async (req, res) => {
+//   const userID  = req.params.id;
+//     try {
+//       console.log('req.user.id ', userID)
+//         const users = await Products.find({userID});
+//         res.status(200).json(users);
+//       } catch (error) {
+//         res.status(500).json({ message: error.message });
+//       }
+//   };
+// Fetch Products
 module.exports.FetchProducts = async (req, res) => {
-    try {
-        const users = await Products.find();
-        res.status(200).json(users);
-      } catch (error) {
-        res.status(500).json({ message: error.message });
-      }
-  };
+  const userId = req.params.userId;
+  try {
+    console.log('req.params.userId', userId);
+    const products = await Products.find({ userId });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 //Delete Products
 module.exports.DeleteProducts = async (req, res) => {

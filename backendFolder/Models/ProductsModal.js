@@ -21,11 +21,11 @@ const productsSchema = new mongoose.Schema({
         type: String,
         required: [true, "Description is Required"],
     },
-    // userIdInProducts: {
-    //     type: String,
-    //     // required: [true, "Product Name is Required"],
-    //     // unique: true,
-    // },
+    userId: {
+        type: String,
+        // required: [true, "Product Name is Required"],
+        // unique: true,
+    },
 });
 
 module.exports = mongoose.model("Products", productsSchema);

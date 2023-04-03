@@ -16,11 +16,12 @@ const Sidebar = () => {
 
   const Menus = [
     { title: 'Dashboard', src: 'chart_fill', path: '/' },
-    { title: 'Purchase Items', src: 'products', path: '/PurchaseItems' },
     { title: 'Add Items', src: 'addProducts', path: '/AddItems' },
-    { title: 'Sell Item', src: 'Search', path: '/SellItems' },
+    { title: 'Items', src: 'products', path: '/MyStock' },
+    { title: 'Purchase Items', src: 'products', path: '/PurchaseItems' },
+    { title: 'Add Item', src: 'Search', path: '/SellItems' },
+    { title: 'Stores', src: 'Search', path: '/Stores' },
     { title: 'Add Suppliers', src: 'products', path: '/AddSuppliers' },
-    { title: 'MyStock', src: 'products', path: '/MyStock' },
     { title: 'User Pages', src: 'Search', path: '/' },
   ]
 

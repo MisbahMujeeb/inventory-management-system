@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router'
+import { MongoServerError } from 'mongoose';
 
 
 
@@ -18,18 +19,46 @@ const AddItems = () => {
 
 
   // const [products, setProducts] = useState({ productName: '', productQuantity: 1, productManufacturer: "", productDescription: "" });
-  const [products, setProducts] = useState(productId ? { productName: product.productName,
-     productQuantity: product.productQuantity, productPrice: product.productPrice, productManufacturer: product.productManufacturer,
-      productDescription: product.productDescription } : 
-    { productName: '', productQuantity: 1, productPrice:'', productManufacturer: "", productDescription: "" });
+  const [products, setProducts] = useState(productId ? { 
+    productName: product.productName,
+    productQuantity: 1, // default quantity set to 10
+    productPrice: product.productPrice, 
+    productManufacturer: product.productManufacturer,
+    productDescription: product.productDescription,
+    userId: product.userId,
+  } : { 
+    productName: '', 
+    productQuantity: 1, 
+    productPrice:'',
+    productManufacturer: "", 
+    productDescription: "", 
+    userId: '' 
+  });
 
+
+
+    useEffect(() => {
+      const varifyUser = async () => {
+          const { data } = await axios.post(
+            'http://localhost:4000/', {}, { withCredentials: true }
+          )
+          if (!data.status) {
+            toast(`User id Not Found`, { theme: 'dark' })
+          } else { 
+            setProducts({userId: data.uId , productQuantity:1 })
+        }
+      }
+      varifyUser()
+    }, [])
 
     const HandleSubmit = async (event) => {
+  
       event.preventDefault();
       if (!products.productName || !products.productManufacturer || !products.productDescription) {
         toast.error('Please fill out all fields');
       } else {
         try {
+          
           let data = null;
           if (productId) {
             console.log('edited');
@@ -46,8 +75,16 @@ const AddItems = () => {
             toast.error(data.data.message || 'Failed to add product');
           }
         } catch (error) {
-          console.log(error);
-          toast.error('Failed to add product');
+          if (error instanceof MongoServerError && error.code === 11000) {
+            // If the error is a duplicate key error, show a user-friendly error message
+            const duplicateKey = error.keyValue.productName;
+            toast.error(`Error: A product with the name "${duplicateKey}" already exists.`);
+          } else {
+            // If the error is not a duplicate key error, show a generic error message
+            toast.error("An error occurred while inserting the document:", error);
+          }
+          // console.log(error);
+          // toast.error('Failed to add product');
         }
       }
     };
@@ -81,6 +118,7 @@ const AddItems = () => {
           <div >
             <form onSubmit={(e) => HandleSubmit(e)} className="flex flex-wrap -m-2">
               <ToastContainer />
+              
               <div className="p-2 w-full">
                 <div className="relative">
                   <label className="leading-7 text-sm text-gray-600">Name</label>
