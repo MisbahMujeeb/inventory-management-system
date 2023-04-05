@@ -19,10 +19,9 @@ const Sidebar = () => {
     { title: 'Add Items', src: 'addProducts', path: '/AddItems' },
     { title: 'Items', src: 'products', path: '/MyStock' },
     { title: 'Purchase Items', src: 'products', path: '/PurchaseItems' },
-    { title: 'Add Item', src: 'Search', path: '/SellItems' },
     { title: 'Stores', src: 'Search', path: '/Stores' },
     { title: 'Add Suppliers', src: 'products', path: '/AddSuppliers' },
-    { title: 'User Pages', src: 'Search', path: '/' },
+    // { title: 'User Pages', src: 'Search', path: '/' },
   ]
 
   return (
@@ -60,7 +59,7 @@ const Sidebar = () => {
           <Link to={Menu.path} key={index}>
             <li
               key={index}
-              className={`group flex rounded-md p-2 cursor-pointer hover:bg-yellow-50 hover:text-slate-700 duration-200 text-gray-300 text-sm items-center gap-x-4`}
+              className={`group flex rounded-md p-2 cursor-pointer hover:bg-yellow-50 hover:text-slate-700 duration-50 text-gray-300 text-sm items-center gap-x-4`}
             >
               <img className="w-8" src={require(`../assets/${Menu.src}.png`)} />
 

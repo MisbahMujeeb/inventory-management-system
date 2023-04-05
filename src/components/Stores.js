@@ -10,6 +10,8 @@ const Stores = () => {
   const [value , setValue] = useState({ storeName : '', storeLocation : '' , userId:''})
   const [stores, setStores] = useState([])
   const [userId, setUserId] = useState('')
+  const [storeId, setStoreId] = useState('')
+  const [isEdit , setIsEdited] = useState(false)
   const navigate = useNavigate()
 
 
@@ -58,7 +60,16 @@ const Stores = () => {
 
 
 
-
+const EditStore = (store ) => {
+  console.log('edit ' , store)
+  setValue({
+    storeName: store.storeName,
+    storeLocation: store.storeLocation,
+    _id: store._id
+  });
+  setIsEdited(true)
+  setStoreId(store._id)
+}
 
 
   const AddStores = async (event) => {
@@ -68,12 +79,12 @@ const Stores = () => {
     } else {
       try {
         let data = null;
-        // if (productId) {
-        //   console.log('edited');
-        //   data = await axios.put(`http://localhost:4000/editProduct/${productId}`, { ...products });
-        // } else {
+        if (isEdit) {
+          console.log('edited');
+          data = await axios.put(`http://localhost:4000/editStores/${storeId}`, { ...value });
+        } else {
           data = await axios.post('http://localhost:4000/addStores', { ...value });
-        // }
+        }
   
         if (data.data.success) {
           toast.success(data.data.message);
@@ -133,10 +144,8 @@ const Stores = () => {
         <div className="w-full md:w-1/3 p-3 flex justify-center md:justify-start">
           <button
             type="submit"
-            className="flex text-white w-full mt-6 justify-center bg-slate-700 border-0 py-2 px-8 focus:outline-none hover:bg-slate-800 rounded text-lg mb-3"
-            onClick={() => console.log("ok")}
-          >
-            Add Stores
+            className="flex text-white w-full mt-6 justify-center bg-slate-700 border-0 py-2 px-8 focus:outline-none hover:bg-slate-800 rounded text-lg mb-3">
+          {isEdit === true ? 'Edit Store' : 'Add Stores'}  
           </button>
         </div>
         <div></div>
@@ -159,7 +168,7 @@ const Stores = () => {
           <td>{store.storeName}</td>
           <td>{store.storeLocation}</td>
           <td>
-            <button className="bg-green-500 py-1 px-2 text-white m-1 rounded-md">
+            <button onClick={() => EditStore(store)} className="bg-green-500 py-1 px-2 text-white m-1 rounded-md">
               Edit
             </button>
             <button onClick={() => DeleteStores(store._id)} className="bg-red-500 py-1 px-2 text-white m-1 rounded-md">
