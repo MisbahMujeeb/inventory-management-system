@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 const TopBar = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [userEmail, setUserEmail] = useState('misbah@gmail.com')
-  const [userName, setUserName] = useState('misbah')
+  const [userEmail, setUserEmail] = useState('')
+  const [userName, setUserName] = useState('')
 
 
   const logOut = () => {
@@ -16,8 +18,26 @@ const TopBar = () => {
     window.location.reload();
   };
 
+
+  useEffect(() => {
+    const varifyUser = async () => {
+        const { data } = await axios.post(
+          'http://localhost:4000/', {}, { withCredentials: true }
+        )
+        if (!data.status) {
+          toast(`User id Not Found`, { theme: 'dark' })
+        } else { 
+          // setUserName({userId: data.uId , productQuantity:1 })
+          setUserName(data.user.username)
+          setUserEmail(data.user.email)
+      }
+    }
+    varifyUser()
+  }, [])
+
   return (
     <div className='bg-gray-200 h-16 grid'>
+    <ToastContainer />
       <button
         className='justify-self-end mr-8 flex items-center'
         onClick={() => setShowDropdown(!showDropdown)}

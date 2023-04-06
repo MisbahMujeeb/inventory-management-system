@@ -1,0 +1,39 @@
+Users Collection:
+     _id (ObjectId)
+     username (string)
+     password (string)
+ 
+ Products Collection:
+     _id (ObjectId)
+     name (string)
+     stock (string) (initially zero hoga) + 10
+     manufacturer (string)
+ 
+ Purchase Details Collection:
+     _id (ObjectId)
+     product_id (ObjectId)
+     quantity (int)
+     purchase_date (date)
+ 
+ Stores Collection:
+     _id (ObjectId)
+     name (string)
+     address (string)
+     cost price (int)
+     sell price (int)
+ 
+     
+ Sales Collection:
+     _id (ObjectId)
+     product_id (ObjectId)
+     store_id (ObjectId)
+     quantity (int)
+     sale_date (date)
+     total_sale_amount (float)
+ 
+ Purchase Details Collection:
+     _id (ObjectId)
+     product_id (ObjectId)
+     quantity (int)
+     purchase_date (date)
+     total_purchase_amount (float)

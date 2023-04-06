@@ -18,7 +18,7 @@ const Sidebar = () => {
     { title: 'Dashboard', src: 'chart_fill', path: '/' },
     { title: 'Add Items', src: 'addProducts', path: '/AddItems' },
     { title: 'Items', src: 'products', path: '/MyStock' },
-    { title: 'Purchase Items', src: 'products', path: '/PurchaseItems' },
+    { title: 'Purchase Details', src: 'products', path: '/PurchaseItems' },
     { title: 'Stores', src: 'Search', path: '/Stores' },
     { title: 'Add Suppliers', src: 'products', path: '/AddSuppliers' },
     // { title: 'User Pages', src: 'Search', path: '/' },

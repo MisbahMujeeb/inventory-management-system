@@ -84,7 +84,7 @@ useEffect(() => {
                 {/* <td>{product.productManufacturer}</td>
                 <td>{product.productDescription > 25 ? product.productDescription : product.productDescription.slice(0,25)+' ... ' }</td> */}
                 <td>
-                  <button className='bg-blue-500 py-1 px-2 text-white m-1 rounded-md' >Detail</button>
+                  <button className='bg-blue-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/productDetails', { state: { product } })}>Detail</button>
                   <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/AddItems', { state: { product } })}>Edit</button>
                   <button className='bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeleteItem(product._id)}>Delete</button>
                 </td>

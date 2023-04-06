@@ -15,6 +15,7 @@ import SellItems from './SelItems'
 import MyStock from './myStock'
 import AddSuppliers from './AddSuppliers'
 import Stores from './Stores'
+import ProductDEtails from './productDEtails'
 
 
 
@@ -54,6 +55,7 @@ const Main = () => {
             <Route path="/AddItems" element={<AddItems />} />
             <Route path="/MyStock" element={<MyStock />} />
             <Route path="/SellItems" element={<SellItems />} />
+            <Route path="/productDetails" element={<ProductDEtails />} />
             <Route path='/AddSuppliers' element={<AddSuppliers />} />
             <Route path='/Stores' element={<Stores />} />
 

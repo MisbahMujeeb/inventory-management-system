@@ -4,8 +4,8 @@ const Store = require('../Models/StoreModal')
 module.exports.AddStores = async (req, res, next) => {
   try {
     console.log('Add Stores')
-    const { storeName,storeLocation , userId} = req.body;
-    const store = await Store.create({ storeName,storeLocation , userId});
+    const { storeName,storeLocation,costPrice,sellPrice , userId} = req.body;
+    const store = await Store.create({ storeName,storeLocation ,costPrice,sellPrice, userId});
     res.status(201).json({ success: true, message: 'Store added successfully' });
   } catch (err) {
     console.log(err);
@@ -18,7 +18,7 @@ module.exports.FetchStores = async (req, res) => {
   const userId = req.params.userId;
     try {
         const store = await Store.find({ userId });
-        console.log('Fetch Controller', store);
+        // console.log('Fetch Controller', store);
         res.status(200).json(store);
       } catch (error) {
         res.status(500).json({ message: error.message });
