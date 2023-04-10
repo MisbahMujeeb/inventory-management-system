@@ -3,9 +3,9 @@ const Store = require('../Models/StoreModal')
 // Add Products
 module.exports.AddStores = async (req, res, next) => {
   try {
-    console.log('Add Stores')
-    const { storeName,storeLocation,costPrice,sellPrice , userId} = req.body;
-    const store = await Store.create({ storeName,storeLocation ,costPrice,sellPrice, userId});
+    // console.log('Add Stores')
+    const { storeName,storeLocation, userId} = req.body;
+    const store = await Store.create({ storeName,storeLocation , userId});
     res.status(201).json({ success: true, message: 'Store added successfully' });
   } catch (err) {
     console.log(err);
@@ -29,7 +29,7 @@ module.exports.FetchStores = async (req, res) => {
 module.exports.DeleteStores = async (req, res) => {
     try {
       const id = req.params.id; // Retrieve the id parameter from the URL
-      console.log('delete Controller', id);
+      // console.log('delete Controller', id);
       const result = await Store.deleteOne({ _id: id }); // Delete the product with the given id
       res.status(200).json({ message: `Store has been deleted` });
     } catch (error) {

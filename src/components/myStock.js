@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify';
+import AddItems from './AddItems';
 
 
 const MyStock = () => {
@@ -12,13 +13,27 @@ const MyStock = () => {
   const DeleteItem = async (id) => {
     console.log('id', id);
     try {
+      // show an alert before deleting the item
+      const confirmDelete = window.confirm("Are you sure you want to delete this item? It also delete this item from purchase and sale stock.");
+      if (!confirmDelete) {
+        return;
+      }
       const { data } = await axios.delete(`http://localhost:4000/deleteProduct/${id}`);
-      //    setProducts(data)
+      // setProducts(data)
       window.location.reload()
       toast.success(data.message);
     } catch (error) {
       console.log(error);
     }
+    // console.log('id', id);
+    // try {
+    //   const { data } = await axios.delete(`http://localhost:4000/deleteProduct/${id}`);
+    //   //    setProducts(data)
+    //   window.location.reload()
+    //   toast.success(data.message);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
 
@@ -59,16 +74,15 @@ useEffect(() => {
       <div className="container px-10 py-5 mx-auto">
         <div className="flex flex-col w-full">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">My Stock</h1>
-          <button type='button' className="flex text-white w-40 justify-center bg-slate-700 border-0 py-2 px-8 focus:outline-none hover:bg-slate-800 rounded text-lg mb-3" onClick={() => navigate("/AddItems")} >Add Items</button>
+          <button type='button' className="flex absolute right-6 top-6 text-white w-40 justify-center bg-slate-700 border-0 py-2 px-8 focus:outline-none hover:bg-slate-800 rounded text-lg mb-3" onClick={() => navigate("/AddItems")} >Add Items</button>
         </div>
-
         <table className="table-auto w-full text-center ">
           <thead>
             <tr className='border-b-2'>
               <th>S.No</th>
               <th>Item Name</th>
               <th>Quantity</th>
-              <th>Price</th>
+              {/* <th>Price</th> */}
               {/* <th>Manufacturer</th> */}
               {/* <th>Description</th> */}
               <th>Actions</th>
@@ -80,13 +94,13 @@ useEffect(() => {
                 <td>{index + 1}</td>
                 <td>{product.productName}</td>
                 <td>{product.productQuantity}</td>
-                <td>{product.productPrice}</td>
+                {/* <td>{product.productPrice}</td> */}
                 {/* <td>{product.productManufacturer}</td>
                 <td>{product.productDescription > 25 ? product.productDescription : product.productDescription.slice(0,25)+' ... ' }</td> */}
                 <td>
-                  <button className='bg-blue-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/productDetails', { state: { product } })}>Detail</button>
-                  <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/AddItems', { state: { product } })}>Edit</button>
-                  <button className='bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeleteItem(product._id)}>Delete</button>
+                  <button className='w-full md:w-auto bg-blue-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/productDetails', { state: { product } })}>Detail</button>
+                  <button className='w-full md:w-auto bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => navigate('/AddItems', { state: { product } })}>Edit</button>
+                  <button className='w-full md:w-auto bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeleteItem(product._id)}>Delete</button>
                 </td>
               </tr>
             ))}

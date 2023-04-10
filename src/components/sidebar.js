@@ -16,11 +16,11 @@ const Sidebar = () => {
 
   const Menus = [
     { title: 'Dashboard', src: 'chart_fill', path: '/' },
-    { title: 'Add Items', src: 'addProducts', path: '/AddItems' },
+    // { title: 'Add Items', src: 'addProducts', path: '/AddItems' },
     { title: 'Items', src: 'products', path: '/MyStock' },
     { title: 'Purchase Details', src: 'products', path: '/PurchaseItems' },
     { title: 'Stores', src: 'Search', path: '/Stores' },
-    { title: 'Add Suppliers', src: 'products', path: '/AddSuppliers' },
+    { title: 'Sales', src: 'products', path: '/Sales' },
     // { title: 'User Pages', src: 'Search', path: '/' },
   ]
 
@@ -46,7 +46,7 @@ const Sidebar = () => {
           alt=""
         />
         <h1
-          className={`text-white origin-left font-medium text-xl duration-300 ${
+          className={`text-white origin-left font-medium md:text-lg text-sm duration-300 ${
             !open && 'scale-0'
           }`}
         >
@@ -59,7 +59,8 @@ const Sidebar = () => {
           <Link to={Menu.path} key={index}>
             <li
               key={index}
-              className={`group flex rounded-md p-2 cursor-pointer hover:bg-yellow-50 hover:text-slate-700 duration-50 text-gray-300 text-sm items-center gap-x-4`}
+              className={`group flex rounded-md p-2 cursor-pointer hover:bg-yellow-50
+               hover:text-slate-700 duration-50 text-gray-300 text-sm items-center gap-x-4`}
             >
               <img className="w-8" src={require(`../assets/${Menu.src}.png`)} />
 
@@ -75,7 +76,8 @@ const Sidebar = () => {
               <h2
                 className={`${
                   open && 'hidden'
-                } absolute left-48 bg-white font-semibold whitespace-pre text-gray- rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 m-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+                } absolute left-48 bg-white font-semibold whitespace-pre rounded-md drop-shadow-lg
+                 px-0 py-0 w-0 overflow-hidden group-hover:px-2 m-2 group-hover:py-1 group-hover:left-14 group-hover:duration-50 group-hover:w-fit`}
               >
                 {Menu?.title}
               </h2>

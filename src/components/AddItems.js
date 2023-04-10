@@ -16,25 +16,24 @@ const AddItems = () => {
 
   const navigate = useNavigate()
 
-
+console.log(product)
 
   // const [products, setProducts] = useState({ productName: '', productQuantity: 1, productManufacturer: "", productDescription: "" });
   const [products, setProducts] = useState(productId ? { 
     productName: product.productName,
-    productQuantity: 1, // default quantity set to 10
-    productPrice: product.productPrice, 
+    productQuantity: 0, // default quantity set to 10
+    // productPrice: product.productPrice, 
     productManufacturer: product.productManufacturer,
     productDescription: product.productDescription,
     userId: product.userId,
   } : { 
     productName: '', 
-    productQuantity: 1, 
-    productPrice:'',
+    productQuantity: 0, 
+    // productPrice:'',
     productManufacturer: "", 
     productDescription: "", 
     userId: '' 
   });
-
 
 
     useEffect(() => {
@@ -45,7 +44,7 @@ const AddItems = () => {
           if (!data.status) {
             toast(`User id Not Found`, { theme: 'dark' })
           } else { 
-            setProducts({userId: data.uId , productQuantity:1 })
+            setProducts({userId: data.uId , productQuantity:0 })
         }
       }
       varifyUser()
@@ -54,9 +53,6 @@ const AddItems = () => {
     const HandleSubmit = async (event) => {
   
       event.preventDefault();
-      if (!products.productName || !products.productManufacturer || !products.productDescription) {
-        toast.error('Please fill out all fields');
-      } else {
         try {
           
           let data = null;
@@ -74,18 +70,13 @@ const AddItems = () => {
           } else {
             toast.error(data.data.message || 'Failed to add product');
           }
-        } catch (error) {
-          if (error instanceof MongoServerError && error.code === 11000) {
-            // If the error is a duplicate key error, show a user-friendly error message
-            const duplicateKey = error.keyValue.productName;
-            toast.error(`Error: A product with the name "${duplicateKey}" already exists.`);
+        } catch (err) {
+          if (err.code === 11000) {
+            toast.error('The Product already exists.'); // Show error toast for duplicate key error
           } else {
-            // If the error is not a duplicate key error, show a generic error message
-            toast.error("An error occurred while inserting the document:", error);
+            console.log(err);
+            toast.error('Failed to add Product.'); // Show generic error toast
           }
-          // console.log(error);
-          // toast.error('Failed to add product');
-        }
       }
     };
     
@@ -107,6 +98,7 @@ const AddItems = () => {
   return (
     <section className="text-gray-600 body-font relative">
       <div className="container px-5 py-10 mx-auto">
+      <ToastContainer />
         <div className="flex flex-col w-full text-center">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
             {isEdit == true ? 'Edit Items' : 'Add Items'}
@@ -117,7 +109,7 @@ const AddItems = () => {
         <div className="lg:w-1/2 md:w-2/3 mx-auto">
           <div >
             <form onSubmit={(e) => HandleSubmit(e)} className="flex flex-wrap -m-2">
-              <ToastContainer />
+           
               
               <div className="p-2 w-full">
                 <div className="relative">
@@ -153,7 +145,7 @@ const AddItems = () => {
                 </div>
              
               </div>
-              <div className="p-2 w-full">
+              {/* <div className="p-2 w-full">
                 <div className="relative">
                   <label className="leading-7 text-sm text-gray-600">Price</label>
                   <input type={'number'}
@@ -168,7 +160,7 @@ const AddItems = () => {
                     className='block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400'
                   />
                 </div>
-                </div>
+                </div> */}
               <div className="p-2 w-full">
                 <div className="relative">
                   <label className="leading-7 text-sm text-gray-600">Description</label>
@@ -182,11 +174,6 @@ const AddItems = () => {
                     name="message" className="block rounded-lg bg-gray-100 w-full p-2.5 border border-gray-400"></textarea>
                 </div>
               </div>
-              {/* <div className="p-2 w-full  ">
-                <button type='submit' className="flex text-white mx-auto bg-slate-700 border-0 py-2 px-8
-          focus:outline-none hover:bg-slate-800 rounded text-lg">Submit</button>
-
-              </div> */}
               <div className="p-2 w-full">
   <button
     type="submit"

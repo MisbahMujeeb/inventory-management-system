@@ -13,7 +13,7 @@ import AddItems from './AddItems'
 import PurchaseItems from './purchaseItem'
 import SellItems from './SelItems'
 import MyStock from './myStock'
-import AddSuppliers from './AddSuppliers'
+import Sales from './Sales'
 import Stores from './Stores'
 import ProductDEtails from './productDEtails'
 
@@ -56,7 +56,7 @@ const Main = () => {
             <Route path="/MyStock" element={<MyStock />} />
             <Route path="/SellItems" element={<SellItems />} />
             <Route path="/productDetails" element={<ProductDEtails />} />
-            <Route path='/AddSuppliers' element={<AddSuppliers />} />
+            <Route path='/Sales' element={<Sales />} />
             <Route path='/Stores' element={<Stores />} />
 
             {/* add your own routes here */}

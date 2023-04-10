@@ -10,14 +10,6 @@ const StoresSchema = new mongoose.Schema({
         type: String,
         required: [true, "storeLocation is Required"],
     },
-    costPrice: {
-        type: Number,
-        required: [true, "Cost Price is Required"],
-    },
-    sellPrice: {
-        type: Number,
-        required: [true, "Sell Price is Required"],
-    },
     userId: {
         type: String,
         // required: [true, "Product Name is Required"],

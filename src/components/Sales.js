@@ -2,14 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 
-const PurchaseItem = () => {
+const Sales = () => {
   const [showModal, setShowModal] = useState(false);
   const [productsName, setProductsName] = useState([]);
+  const [storeName, setStoreName] = useState([]);
   const [userId, setUserId] = useState('')
-  const [values , setValues] = useState({purchaseProductsId: '' , purchaseQuantity:'' ,purchasePrice : 0, purchaseDate : '' ,userId:''  })
-  const [purchaseData, setPurchaseData] = useState([])
+  const [values , setValues] = useState({salesProductsId: '' ,salesStoreId: '' , salesQuantity:'' ,salesPrice : 0, salesDate : '' ,userId:''  })
+  const [salesData, setSalesData] = useState([])
   const [isEdit, setIsEdited] = useState(false)
-  const [purchaseItemId, setPurchaseItem] = useState('')
+  const [salesItemId, setSalesItem] = useState('')
 
 
 
@@ -37,14 +38,26 @@ const PurchaseItem = () => {
         console.log(error)
       }
     }
+    const fetchStoresData = async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:4000/fetchStores/${userId}`)
+        setStoreName(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchStoresData()
     fetchData()
   }, [userId])
+
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:4000/fetchPurchaseItem/${userId}`)
-        setPurchaseData(data)
+        const { data } = await axios.get(`http://localhost:4000/fetchSales/${userId}`)
+        setSalesData(data)
         console.log(data)
       } catch (error) {
         console.log(error)
@@ -54,40 +67,41 @@ const PurchaseItem = () => {
   }, [userId])
   
   
-  const EditPurchaseItem = (purchaseItem) => {
+  const EditSalesItem = (salesItem) => {
     setValues({
-    purchaseProductsId: purchaseItem.purchaseProductsId,
-    purchaseQuantity: purchaseItem.purchaseQuantity,
-    purchasePrice: purchaseItem.purchasePrice,
-    purchaseDate: purchaseItem.purchaseDate,
+    salesProductsId: salesItem.salesProductsId,
+    salesStoreId: salesItem.salesStoreId,
+    salesQuantity: salesItem.salesQuantity,
+    salesPrice: salesItem.salesPrice,
+    salesDate: salesItem.salesDate,
     });
     setShowModal(true);
     setIsEdited(true);
-    setPurchaseItem(purchaseItem._id);
+    setSalesItem(salesItem._id);
     };
 
-  const AddPurchaseDetails = async (event) => {
+  const AddSalesDetails = async (event) => {
     event.preventDefault();
     try {
       let data = null;
       if (isEdit) {
         console.log('edited');
-        data = await axios.put(`http://localhost:4000/editPurchaseItem/${purchaseItemId}`, { ...values });
+        data = await axios.put(`http://localhost:4000/editSales/${salesItemId}`, { ...values });
       } else {
-        data = await axios.post('http://localhost:4000/addPurchaseItem', { ...values });
+        data = await axios.post('http://localhost:4000/addSales', { ...values });
      }
 
       if (data.data.success) {
         toast.success(data.data.message);
-        setValues({purchaseProductsId: '' , purchaseQuantity:'' ,purchasePrice : 0, purchaseDate : '' ,userId:''  });
+        setValues({salesProductsId: '',salesStoreId:'' , salesQuantity:'' ,salesPrice : 0, salesDate : '' ,userId:''  });
         setShowModal(false)
         window.location.reload()
 
       } else {
-        toast.error(data.data.message || 'Failed to add Purchase');
+        toast.error(data.data.message || 'Failed to add sales');
       }
     } catch (err) {
-        toast.error('Failed to do Purchase.'); // Show generic error toast
+        toast.error('Failed to do sales.'); // Show generic error toast
     
   }
 
@@ -95,10 +109,10 @@ const PurchaseItem = () => {
   }
 
 
-  const DeletePurchaseItem = async (id) => {
+  const DeleteSalesItem = async (id) => {
     //  console.log('id', id);
     try {
-      const { data } = await axios.delete(`http://localhost:4000/deletePurchaseItem/${id}`);
+      const { data } = await axios.delete(`http://localhost:4000/deleteSales/${id}`);
       //    setProducts(data)
       window.location.reload()
       toast.success(data.message);
@@ -113,7 +127,7 @@ const PurchaseItem = () => {
     <section className="text-gray-600 body-font relative">
       <div className="container align-middle px-5 py-5 mx-auto">
         <div className="flex flex-col w-full ">
-          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Purchase Item</h1>
+          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Sales</h1>
         </div>
 
         <button
@@ -137,26 +151,26 @@ const PurchaseItem = () => {
                   {/*header*/}
                   <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                     <h3 className="text-3xl font-semibold">
-                      {isEdit === true ? 'Edit Purchase Detail' : 'Add Purchase Detail'}
+                      {isEdit === true ? 'Edit sales Detail' : 'Add sales Detail'}
                     </h3>
                   </div>
-                  <form onSubmit={(event) => AddPurchaseDetails(event)}>
+                  <form onSubmit={(event) => AddSalesDetails(event)}>
                   {/*body*/}
                   <div className="relative p-6 flex-auto ">
-                    <div className='flex row'>
-                      <div className='w-1/2 p-3'>
+                  <div className='flex row'>
+                      <div className='w-full p-3'>
                         <label>Product Name</label>
                         <select
                           id="category"
-                          name='purchaseProductsId'
-                          value={values.purchaseProductsId}
+                          name='salesProductsId'
+                          value={values.salesProductsId}
                           className="w-full
              bg-gray-100 bg-opacity-50 rounded border border-gray-300
               focus:border-slate-500 focus:bg-white focus:ring-2
                focus:ring-slate-200 text-base outline-none
                 text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
                           onChange={(e) =>
-                            setValues({ ...values, purchaseProductsId: e.target.value })
+                            setValues({ ...values, salesProductsId: e.target.value })
                           }
                         >
                           <option>Select Product</option>
@@ -167,14 +181,38 @@ const PurchaseItem = () => {
                           })}
                         </select>
                       </div>
+                    </div>
+                    <div className='flex row'>
+                      <div className='w-1/2 p-3'>
+                        <label>Store Name</label>
+                        <select
+                          name='salesStoreId'
+                          value={values.salesStoreId}
+                          className="w-full
+             bg-gray-100 bg-opacity-50 rounded border border-gray-300
+              focus:border-slate-500 focus:bg-white focus:ring-2
+               focus:ring-slate-200 text-base outline-none
+                text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                          onChange={(e) =>
+                            setValues({ ...values, salesStoreId: e.target.value })
+                          }
+                        >
+                          <option>Select Store</option>
+                          {storeName.map((element) => {
+                            return (
+                              <option value={element._id}>{element.storeName}</option>
+                            )
+                          })}
+                        </select>
+                      </div>
                       <div className='w-1/2 p-3'>
                         <label>Quantity</label>
                         <input type="number" 
-                        name='purchaseQuantity'
-                        value={values.purchaseQuantity}
+                        name='salesQuantity'
+                        value={values.salesQuantity}
                         min={0} id="" 
                          onChange={(e) =>
-                            setValues({ ...values, purchaseQuantity: e.target.value })
+                            setValues({ ...values, salesQuantity: e.target.value })
                           }
                            className="w-full
              bg-gray-100 bg-opacity-50 rounded border border-gray-300
@@ -185,25 +223,25 @@ const PurchaseItem = () => {
                     </div>
                     <div className='flex row'>
                       <div className='w-1/2 p-3'>
-                        <label>Buying Price for single Product</label>
+                        <label>Sale Price</label>
                         <input type="number"
-                          value={values.purchasePrice}
+                          value={values.salesPrice}
                          onChange={(e) =>
-                            setValues({ ...values, purchasePrice: e.target.value })
+                            setValues({ ...values, salesPrice: e.target.value })
                           }
-                         id="" name="purchasePrice" className="w-full
+                         id="" name="salesPrice" className="w-full
              bg-gray-100 bg-opacity-50 rounded border border-gray-300
               focus:border-slate-500 focus:bg-white focus:ring-2
                focus:ring-slate-200 text-base outline-none
                 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
                       </div>
                       <div className='w-1/2 p-3'>
-                        <label>Buying Date</label>
+                        <label>Sale Date</label>
                         <input type="date" id="" 
-                          value={values.purchaseDate}
-                        name="purchaseDate" 
+                          value={values.salesDate}
+                        name="salesDate" 
                          onChange={(e) =>
-                            setValues({ ...values, purchaseDate: e.target.value })
+                            setValues({ ...values, salesDate: e.target.value })
                           }
                          className="w-full
              bg-gray-100 bg-opacity-50 rounded border border-gray-300
@@ -226,7 +264,7 @@ const PurchaseItem = () => {
                       className="bg-slate-500 text-white active:bg-slate-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="submit"
                     >
-                      {isEdit === true ? 'Edit Purchase Detail' : 'Add Purchase Detail'}
+                      {isEdit === true ? 'Edit sales Detail' : 'Add sales Detail'}
                     </button>
                   </div>
                   </form>
@@ -242,6 +280,7 @@ const PurchaseItem = () => {
             <tr className='border-b-2'>
               <th>S.No</th>
               <th>Product Name</th>
+              <th>Store Name</th>
               <th>Quantity</th>
               <th>Buying Price</th>
               <th>Buying Date</th>
@@ -250,19 +289,22 @@ const PurchaseItem = () => {
             </tr>
           </thead>
           <tbody>
-            {purchaseData && purchaseData.map((purchaseItem, index) => (
+            {salesData && salesData.map((salesItem, index) => (
               <tr key={index} className='border-b-2'>
                 <td>{index + 1}</td>
-                {/* <td>{purchaseItem.purchaseProductsId}</td> */}
+                {/* <td>{salesItem.salesProductsId}</td> */}
                 <td>
-                  {productsName.filter( p => p._id === purchaseItem.purchaseProductsId ).map(p => p.productName)}
+                  {productsName.filter( p => p._id === salesItem.salesProductsId ).map(p => p.productName)}
                 </td>
-                <td>{purchaseItem.purchaseQuantity}</td>
-                <td>{purchaseItem.purchasePrice}</td>
-               <td>{purchaseItem.purchaseDate}</td>
                 <td>
-                  <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => EditPurchaseItem(purchaseItem)}>Edit</button>
-                  <button className='bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeletePurchaseItem(purchaseItem._id)}>Delete</button>
+                  {storeName.filter( p => p._id === salesItem.salesStoreId ).map(p => p.storeName)}
+                </td>
+                <td>{salesItem.salesQuantity}</td>
+                <td>{salesItem.salesPrice}</td>
+               <td>{salesItem.salesDate}</td>
+                <td>
+                  <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => EditSalesItem(salesItem)}>Edit</button>
+                  <button className='bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeleteSalesItem(salesItem._id)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -273,4 +315,4 @@ const PurchaseItem = () => {
   )
 }
 
-export default PurchaseItem
+export default Sales
