@@ -91,17 +91,21 @@ const Sales = () => {
         data = await axios.post('http://localhost:4000/addSales', { ...values });
      }
 
-      if (data.data.success) {
-        toast.success(data.data.message);
-        setValues({salesProductsId: '',salesStoreId:'' , salesQuantity:'' ,salesPrice : 0, salesDate : '' ,userId:''  });
-        setShowModal(false)
-        window.location.reload()
+     if (data.data.success) {
+      toast.success(data.data.message);
+      setValues({salesProductsId: '',salesStoreId:'' , salesQuantity:'' ,salesPrice : 0, salesDate : '' ,userId:''  });
+      setShowModal(false)
+      window.location.reload()
 
+    } else {
+      toast.error(data.data.message || 'Failed to add sales');
+    }
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.message);
       } else {
-        toast.error(data.data.message || 'Failed to add sales');
+        toast.error('Failed to sale Product .'); // Show generic error toast
       }
-    } catch (err) {
-        toast.error('Failed to do sales.'); // Show generic error toast
     
   }
 
@@ -121,7 +125,15 @@ const Sales = () => {
     }
   };
 
-
+  const handleProductChange = (productId) => {
+    // const selectedProduct = productsName.find(product => product._id === productId);
+    setValues(values => ({
+      ...values,
+      salesProductsId: productId,
+      salesQuantity: 0, // Set quantity to 0 for the new product
+    }));
+  };
+  
 
   return (
     <section className="text-gray-600 body-font relative">
@@ -169,12 +181,13 @@ const Sales = () => {
               focus:border-slate-500 focus:bg-white focus:ring-2
                focus:ring-slate-200 text-base outline-none
                 text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                          onChange={(e) =>
-                            setValues({ ...values, salesProductsId: e.target.value })
-                          }
+                          // onChange={(e) =>
+                          //   setValues({ ...values, salesProductsId: e.target.value })
+                          // }
+                          onChange={(event) => handleProductChange(event.target.value)}
                         >
                           <option>Select Product</option>
-                          {productsName.map((element) => {
+                          {productsName.filter(p => p.productQuantity > 0).map((element) => {
                             return (
                               <option value={element._id}>{element.productName}</option>
                             )
@@ -210,7 +223,8 @@ const Sales = () => {
                         <input type="number" 
                         name='salesQuantity'
                         value={values.salesQuantity}
-                        min={0} id="" 
+                        min={1} id="" 
+                        max={Number(productsName.filter(sp => sp._id === values.salesProductsId).map(sp => sp.productQuantity))}
                          onChange={(e) =>
                             setValues({ ...values, salesQuantity: e.target.value })
                           }
@@ -219,11 +233,12 @@ const Sales = () => {
               focus:border-slate-500 focus:bg-white focus:ring-2
                focus:ring-slate-200 text-base outline-none
                 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
+                {/* {console.log(productsName.filter(sp => sp._id === values.salesProductsId).map(sp => sp.productQuantity))} */}
                       </div>
                     </div>
                     <div className='flex row'>
                       <div className='w-1/2 p-3'>
-                        <label>Sale Price</label>
+                        <label>Total Sale Price</label>
                         <input type="number"
                           value={values.salesPrice}
                          onChange={(e) =>
@@ -285,7 +300,7 @@ const Sales = () => {
               <th>Buying Price</th>
               <th>Buying Date</th>
               {/* <th>Description</th> */}
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -303,7 +318,7 @@ const Sales = () => {
                 <td>{salesItem.salesPrice}</td>
                <td>{salesItem.salesDate}</td>
                 <td>
-                  <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => EditSalesItem(salesItem)}>Edit</button>
+                  {/* <button className='bg-green-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => EditSalesItem(salesItem)}>Edit</button> */}
                   <button className='bg-red-500 py-1 px-2 text-white m-1 rounded-md' onClick={() => DeleteSalesItem(salesItem._id)}>Delete</button>
                 </td>
               </tr>

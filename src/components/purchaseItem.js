@@ -82,18 +82,27 @@ const PurchaseItem = () => {
         setValues({purchaseProductsId: '' , purchaseQuantity:'' ,purchasePrice : 0, purchaseDate : '' ,userId:''  });
         setShowModal(false)
         window.location.reload()
-
+      } else if (data.data.error && data.data.error.message === "The product already exists In Purchase List frontend.") {
+        toast.error(data.data.error.message); // Show error toast for duplicate key error
+      } else if (data.data.error) {
+        toast.error(data.data.error.message || 'Failed to add product In Purchase List.'); // Show server error message
       } else {
-        toast.error(data.data.message || 'Failed to add Purchase');
+        toast.error('Failed to add product In Purchase List.'); // Show generic error toast
       }
-    } catch (err) {
-        toast.error('Failed to do Purchase.'); // Show generic error toast
-    
+    } catch (error) {
+      console.log(error.code)
+      if (error.response.status === 400) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Failed to add Purchase.'); // Show generic error toast
+      }
+      // if(err.code === 11000){
+      //   toast.error('Failed to do Purchase because it already present in list .please update previous.');
+      // }else{
+      //   toast.error('Failed to do Purchase.'); // Show generic error toast
+      // }
   }
-
-
   }
-
 
   const DeletePurchaseItem = async (id) => {
     //  console.log('id', id);
@@ -172,7 +181,7 @@ const PurchaseItem = () => {
                         <input type="number" 
                         name='purchaseQuantity'
                         value={values.purchaseQuantity}
-                        min={0} id="" 
+                        min={1} id="" 
                          onChange={(e) =>
                             setValues({ ...values, purchaseQuantity: e.target.value })
                           }
@@ -185,7 +194,7 @@ const PurchaseItem = () => {
                     </div>
                     <div className='flex row'>
                       <div className='w-1/2 p-3'>
-                        <label>Buying Price for single Product</label>
+                        <label>Total Buying Price </label>
                         <input type="number"
                           value={values.purchasePrice}
                          onChange={(e) =>

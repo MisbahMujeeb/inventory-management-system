@@ -4,6 +4,7 @@ const SalesSchema = new mongoose.Schema({
     salesProductsId:{
         type: String,
         required: [true, "Product Id is Required"],
+        unique: true,
     } ,
     salesStoreId:{
         type: String,

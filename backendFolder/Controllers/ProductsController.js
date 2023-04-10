@@ -8,14 +8,18 @@ module.exports.AddProducts = async (req, res, next) => {
     // console.log('Add Products')
     const { productName, productQuantity, productManufacturer, productDescription , userId } = req.body;
     const product = await Products.create({ productName, productQuantity, productManufacturer, productDescription ,userId });
-    // const { productName, productQuantity,productPrice, productManufacturer, productDescription , userId } = req.body;
-    // const product = await Products.create({ productName, productQuantity,productPrice, productManufacturer, productDescription ,userId });
     res.status(201).json({ success: true, message: 'Product added successfully' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ success: false, message: 'Failed to add product' });
+    if (err.code === 11000) {
+      res.status(400).json({ success: false, message: 'The product already exists' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to add product' });
+    }
   }
 };
+
+
 
 // Fetch Products
 module.exports.FetchProducts = async (req, res) => {

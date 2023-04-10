@@ -29,6 +29,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`http://localhost:4000/fetchProducts/${userId}`)
+        // const { dataTwo } = await axios.get(`http://localhost:4000/fetchSales/${userId}`)
 
         // In Stock Product
         const quantities = data.map(product => product.productQuantity)
@@ -41,9 +42,9 @@ const Dashboard = () => {
         setProductOutOfStock(outOfStockQuantity)
 
         // In Stock Product
-        const totalStockPrice = data.map(product => product.productPrice)
-        const totalStockPrices = totalStockPrice.reduce((acc, price) => acc + price, 0)
-        setProductStockPrice(totalStockPrices)
+        // const totalStockPrice = dataTwo.map(product => product.salesPrice)
+        // const totalStockPrices = totalStockPrice.reduce((acc, price) => acc + price, 0)
+        // setProductStockPrice(totalStockPrices)
 
 
       } catch (error) {
@@ -51,6 +52,21 @@ const Dashboard = () => {
       }
     }
 
+    fetchData()
+  }, [userId])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:4000/fetchSales/${userId}`)
+
+        // In Stock Product
+        const totalStockPrice = data.map(product => product.salesPrice)
+        const totalStockPrices = totalStockPrice.reduce((acc, price) => acc + price, 0)
+        setProductStockPrice(totalStockPrices)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     fetchData()
   }, [userId])
 
@@ -70,8 +86,8 @@ const Dashboard = () => {
             <h1 className=' font-semibold'>{productOutOfStock}</h1>
           </div>
           <div className='bg-gray-300 w-1/3 p-5 ml-0 m-4 rounded-md shadow-md'>
-            <h1 className='text-lg font-bold'>Total Price of All Items</h1>
-            <h1 className=' font-semibold'>{productStockPrice}</h1>
+            <h1 className='text-lg font-bold'>Total Sale</h1>
+            <h1 className=' font-semibold'>Rs: {productStockPrice}</h1>
           </div>
         </div>
       </div>

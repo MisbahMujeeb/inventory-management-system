@@ -1,4 +1,5 @@
 const SalesItem = require('../Models/SalesModal')
+const Products = require('../Models/ProductsModal')
 
 // Add Products
 module.exports.AddSales = async (req, res, next) => {
@@ -7,10 +8,23 @@ module.exports.AddSales = async (req, res, next) => {
     const {salesProductsId ,salesStoreId , salesQuantity ,salesPrice , salesDate  ,userId  } = req.body;
     const sales = await SalesItem.create({salesProductsId ,salesStoreId , salesQuantity ,salesPrice , salesDate  ,userId  });
     // console.log('add salw',sales)
+
+     //Decrease stock 
+     const product = await Products.findById(salesProductsId);
+    //  console.log(purchase.purchaseQuantity);
+    //  console.log(product.productQuantity);
+     const updatedQuantity = product.productQuantity - sales.salesQuantity;
+     await Products.findByIdAndUpdate(salesProductsId, { productQuantity: updatedQuantity });
+ 
+
     res.status(201).json({ success: true, message: 'Sales Item added successfully' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ success: false, message: 'Failed to add Sales Item' });
+    if (err.code === 11000) {
+      res.status(400).json({ success: false, message: 'The product already exists In Sales List.' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to add product' });
+    }
   }
 };
 
@@ -31,6 +45,8 @@ module.exports.DeleteSales = async (req, res) => {
     try {
         // console.log('del')
       const id = req.params.id; // Retrieve the id parameter from the URL
+      const q = req.params;
+      console.log(q)
       const result = await SalesItem.deleteOne({ _id: id }); // Delete the product with the given id
       res.status(200).json({ message: `Sale Item has been deleted` });
     } catch (error) {

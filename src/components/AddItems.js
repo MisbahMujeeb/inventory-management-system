@@ -51,34 +51,37 @@ console.log(product)
     }, [])
 
     const HandleSubmit = async (event) => {
-  
       event.preventDefault();
-        try {
-          
-          let data = null;
-          if (productId) {
-            console.log('edited');
-            data = await axios.put(`http://localhost:4000/editProduct/${productId}`, { ...products });
-          } else {
-            data = await axios.post('http://localhost:4000/addProducts', { ...products });
-          }
-    
-          if (data.data.success) {
-            toast.success(data.data.message);
-            setProducts({ productName: '', productQuantity: 1,productPrice:'', productManufacturer: '', productDescription: '' });
-            navigate('/MyStock')
-          } else {
-            toast.error(data.data.message || 'Failed to add product');
-          }
-        } catch (err) {
-          if (err.code === 11000) {
-            toast.error('The Product already exists.'); // Show error toast for duplicate key error
-          } else {
-            console.log(err);
-            toast.error('Failed to add Product.'); // Show generic error toast
-          }
+      try {
+        let data = null;
+        if (productId) {
+          console.log('edited');
+          data = await axios.put(`http://localhost:4000/editProduct/${productId}`, { ...products });
+        } else {
+          data = await axios.post('http://localhost:4000/addProducts', { ...products });
+        }
+        if (data.data.success) {
+          toast.success(data.data.message);
+          setProducts({ productName: '', productQuantity: 1,productPrice:'', productManufacturer: '', productDescription: '' });
+          navigate('/MyStock')
+        } else if (data.data.error && data.data.error.message === "The product already exists") {
+          toast.error(data.data.error.message); // Show error toast for duplicate key error
+        } else if (data.data.error) {
+          toast.error(data.data.error.message || 'Failed to add product'); // Show server error message
+        } else {
+          toast.error('Failed to add product'); // Show generic error toast
+        }
+      } catch (error) {
+        console.log(error);
+        if (error.response.status === 400) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Failed to add Product.'); // Show generic error toast
+        }
       }
     };
+    
+    
     
 
 

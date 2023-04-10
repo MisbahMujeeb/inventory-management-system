@@ -4,6 +4,7 @@ const PurchaseSchema = new mongoose.Schema({
     purchaseProductsId:{
         type: String,
         required: [true, "Product Id is Required"],
+        unique: true,
     } ,
      purchaseQuantity:{
         type: Number,
